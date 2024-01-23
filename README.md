@@ -1,4 +1,16 @@
-# @xavdid's Python Advent of Code Project Template
+# Advent of Code 2016 Python
+
+My solutions to [Advent of Code 2016](https://adventofcode.com/2016) done in Python
+
+## Performance
+
+![](https://img.shields.io/badge/day%20📅-24-blue)
+ 
+![](https://img.shields.io/badge/stars%20⭐-0-yellow)
+
+---
+
+# Based on @xavdid's Python Advent of Code Project Template
 
 This is my tried-and-true Python utility package for the phenomenal [Advent of Code](https://adventofcode.com/) puzzles. It handles creating stub solutions, input parsing, and printing your answer, letting you focus on the actual solve. I've been [using it since 2017](https://github.com/xavdid/advent-of-code).
 
