@@ -13,7 +13,7 @@ class BaseSolution():
     _year: int
     _day: int
 
-    def __init__(self, lines = False, csv = False):
+    def __init__(self, lines = False, csv = False, TwoD = False):
         if lines:
             self.input = self.read_input().splitlines()
         else:  
@@ -22,7 +22,12 @@ class BaseSolution():
 
                     self.input = [line.split(",") for line in lines]
                 else:    
-                    self.input = self.read_input()  
+                    if TwoD:
+                        lines = self.read_input().splitlines()
+
+                        self.input = [list(line) for line in lines]
+                    else:    
+                        self.input = self.read_input()  
 
     @property
     def year(self):
@@ -82,12 +87,16 @@ class BaseSolution():
 
 class InputAsStringSolution(BaseSolution):
         def __init__(self):
-            super().__init__(lines=False, csv=False)
+            super().__init__(lines=False, csv=False, TwoD=False)
 
 class InputAsLinesSolution(BaseSolution):
         def __init__(self):
-            super().__init__(lines=True, csv=False)
+            super().__init__(lines=True, csv=False, TwoD=False)
 
 class InputAsCSVSolution(BaseSolution):
         def __init__(self):
-            super().__init__(lines=False, csv=True)
+            super().__init__(lines=False, csv=True, TwoD=False)
+
+class InputAs2DSolution(BaseSolution):
+        def __init__(self):
+            super().__init__(lines=False, csv=False, TwoD=True)
