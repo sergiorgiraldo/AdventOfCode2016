@@ -5,7 +5,6 @@ from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from misc.date_utils import current_puzzle_year, next_day
 
 PARSER = argparse.ArgumentParser(
     prog="./start", description="Scaffold a new Advent of Code solution"
@@ -19,7 +18,7 @@ PARSER.add_argument(
     ),
     nargs="?",
 )
-PARSER.add_argument("--year", default=current_puzzle_year(), help="Puzzle year")
+PARSER.add_argument("--year",  type=int, help="Puzzle year")
 
 if __name__ == "__main__":
     ARGS = PARSER.parse_args()

@@ -35,7 +35,7 @@ class Solution(InputAsLinesSolution):
 
         code_keys = [keypad[x][y] for x, y in code]
 
-        code = "".join(str(i) for i in code_keys)
+        code = "".join(str(key) for key in code_keys)
 
         return code
 
@@ -67,7 +67,7 @@ class Solution(InputAsLinesSolution):
 
         code_keys = [keypad[x][y] for x, y in code]
 
-        code = "".join(str(i) for i in code_keys)
+        code = "".join(str(key) for key in code_keys)
 
         return code
 
