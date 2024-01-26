@@ -84,7 +84,5 @@ class Solution(InputAsLinesSolution):
 
 if __name__ == '__main__':
     solution = Solution()
-
     solution.part_1()
-
     solution.part_2()

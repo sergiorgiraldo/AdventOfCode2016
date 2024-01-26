@@ -2,6 +2,7 @@
 
 import argparse
 from pathlib import Path
+from os import path;
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -61,6 +62,8 @@ if __name__ == "__main__":
     input_path = Path(day_dir, "input.txt")
 
     # Save content to file
+    if path.exists(input_path): 
+        open(input_path, 'w').close() # always overwrite
     f = open(input_path, "a")
     for line in content:
         f.write(line)
@@ -79,7 +82,7 @@ if __name__ == "__main__":
         print("skipping solution creation, file already exists")
     else:
         template = Path("misc/example_solution.py.tmpl").read_text()
-        replaced_template = template.replace("<YEAR>", ARGS.year).replace(
+        replaced_template = template.replace("<YEAR>", str(ARGS.year)).replace(
             "<DAY>", str(day)
         )
         solution_path.write_text(replaced_template)
