@@ -3,9 +3,9 @@
 import sys
 sys.path.insert(0,"..")
 
-from base.advent import BaseSolution
+from base.advent import *
 
-class Solution(BaseSolution):
+class Solution(InputAsStringSolution):
     _year = 2016
     _day = 1
 
@@ -45,15 +45,13 @@ class Solution(BaseSolution):
         arr = self.input.split(", ")
         res = self.shortest_path(arr)
 
-        self.save("1", str(res))
-        print("Part 1::", res)
+        self.solve("1", res)
 
     def part_2(self):
         arr = self.input.split(", ")
         res = self.first_duplicate(arr)
 
-        self.save("2", str(res))
-        print("Part 2::", res)
+        self.solve("2", res)
 
 if __name__ == "__main__":
     solution = Solution()
