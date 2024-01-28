@@ -6,7 +6,6 @@
 ### ⚠ BREAKING CHANGES
 
 * day 6 completed
-* day 6 completed
 
 ### Features
 
