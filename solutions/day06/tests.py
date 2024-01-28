@@ -2,9 +2,9 @@ import unittest
 
 from solution import Solution
 
+solution = Solution()
 class Tests(unittest.TestCase):
     def test_get_corrected_message_common(self):
-        solution = Solution()
         messages = [
             "eedadn",
             "drvtee",
@@ -26,7 +26,6 @@ class Tests(unittest.TestCase):
         self.assertEqual(solution.get_corrected_message_common(messages), "easter", "Oops")
 
     def test_get_corrected_message_uncommon(self):
-        solution = Solution()
         messages = [
             "eedadn",
             "drvtee",
