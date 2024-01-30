@@ -6,7 +6,7 @@ My solutions to [Advent of Code 2016](https://adventofcode.com/2016) done in Pyt
 
 ![](https://img.shields.io/badge/day%20📅-24-blue)
  
-![](https://img.shields.io/badge/stars%20⭐-14-yellow)
+![](https://img.shields.io/badge/stars%20⭐-20-yellow)
 
 ---
 
