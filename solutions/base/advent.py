@@ -25,7 +25,7 @@ class BaseSolution(ABC):
                     lines = cls.read_input().splitlines()
 
                     cls.input = [list(line) for line in lines]
-                else:    
+                else: #if string:   
                     cls.input = cls.read_input()  
 
     @property
@@ -83,12 +83,12 @@ class BaseSolution(ABC):
     def submit(self, part, res):
         submit(res, part=part, day=self.day, year=self.year)
 
-    def solve(self, part, res):
+    def solve(self, part, res, submit = True):
         self.save(part, str(res))
 
         print(f"Part {part} :: {res}")
 
-        self.submit(part = "a" if part == "1" else "b" , res = res)
+        if submit:self.submit(part = "a" if part == "1" else "b" , res = res)
 
 # Concrete Solutions
 class InputAsStringSolution(BaseSolution):

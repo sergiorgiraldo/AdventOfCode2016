@@ -10,14 +10,14 @@ class Solution(InputAsLinesSolution):
     _day = 10
 
     def factory(self, instructions, part, comparison = None):
-        prod = 1
+        product_of_chips = 1
         bots, instruction = defaultdict(list), {}
 
         for current in instructions:
             split = [int(x) if x.isdigit() else x for x in current.split()]
-            if current.startswith('value'):
+            if current.startswith("value"): # value 5 goes to bot 2
                 bots[split[-1]] += split[1],
-            else:
+            else:                           # bot 2 gives low to bot 1 and high to bot 0
                 instruction[split[1]] = (split[5], split[6], split[-2], split[-1])
 
         while True:
@@ -31,20 +31,20 @@ class Solution(InputAsLinesSolution):
                 if (m, M) == comparison:
                     return id
 
-            if low == 'bot':
+            if low == "bot":
                 bots[lowId] += m,
             else:
                 if lowId in {0, 1, 2}:
-                    prod *= m
+                    product_of_chips *= m
 
-            if high == 'bot':
+            if high == "bot":
                 bots[highId] += M,
             else:
                 if highId in {0, 1, 2}:
-                    prod *= M
+                    product_of_chips *= M
 
         if part == 2:
-            return prod
+            return product_of_chips
 
     def part_1(self):
         res = self.factory(self.input, 1, (17, 61))
@@ -56,7 +56,7 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
