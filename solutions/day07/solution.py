@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/7
+from base.advent import *
 import re
 import sys
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
-from base.advent import *
 
 class Solution(InputAsLinesSolution):
     _year = 2016
@@ -11,22 +11,20 @@ class Solution(InputAsLinesSolution):
 
     def has_ABBA(self, s):
         return any(w[:2] == w[3:1:-1] and w[0] != w[1]
-                for w in zip(s, s[1:], s[2:], s[3:]))
-
+                   for w in zip(s, s[1:], s[2:], s[3:]))
 
     def get_ABA(self, s):
         return [w for w in zip(s, s[1:], s[2:]) if w[0] == w[2] != w[1]]
-
 
     def get_ips_with_TLS(self, arg):
         count = 0
         for ip in arg:
             sections = re.split(r"(\[.*?])", ip)
             sup, hypernet = sections[::2], sections[1::2]
-            count += any(map(self.has_ABBA, sup)) and not any(map(self.has_ABBA, hypernet))
+            count += any(map(self.has_ABBA, sup)
+                         ) and not any(map(self.has_ABBA, hypernet))
 
         return count
-
 
     def get_ips_with_SSL(self, arg):
         count = 0
@@ -48,9 +46,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res)
 
+
 if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

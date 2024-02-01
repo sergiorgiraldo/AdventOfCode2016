@@ -1,24 +1,26 @@
 # puzzle prompt: https://adventofcode.com/2016/day/10
 
-import sys
-sys.path.insert(0,"..")
-from collections import defaultdict
 from base.advent import *
+from collections import defaultdict
+import sys
+sys.path.insert(0, "..")
+
 
 class Solution(InputAsLinesSolution):
     _year = 2016
     _day = 10
 
-    def factory(self, instructions, part, comparison = None):
+    def factory(self, instructions, part, comparison=None):
         product_of_chips = 1
         bots, instruction = defaultdict(list), {}
 
         for current in instructions:
             split = [int(x) if x.isdigit() else x for x in current.split()]
-            if current.startswith("value"): # value 5 goes to bot 2
+            if current.startswith("value"):  # value 5 goes to bot 2
                 bots[split[-1]] += split[1],
             else:                           # bot 2 gives low to bot 1 and high to bot 0
-                instruction[split[1]] = (split[5], split[6], split[-2], split[-1])
+                instruction[split[1]] = (
+                    split[5], split[6], split[-2], split[-1])
 
         while True:
             id = next((k for k, v in bots.items() if len(v) > 1), None)
@@ -56,9 +58,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res)
 
+
 if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

@@ -1,8 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/8
+from base.advent import *
 import re
 import sys
-sys.path.insert(0,"..")
-from base.advent import *
+sys.path.insert(0, "..")
+
 
 class Solution(InputAsLinesSolution):
     _year = 2016
@@ -39,20 +40,21 @@ class Solution(InputAsLinesSolution):
         for row in zip(*screen):
             print("".join(" #"[i] for i in row))
 
-#  # ###   ##    ## #### #    ###   ##  #### #### 
-#  # #  # #  #    # #    #    #  # #  # #       # 
-#  # #  # #  #    # ###  #    ###  #    ###    #  
-#  # ###  #  #    # #    #    #  # #    #     #   
-#  # #    #  # #  # #    #    #  # #  # #    #    
- ##  #     ##   ##  #    #### ###   ##  #### ####         
-        
+#  # ###   ##    ## #### #    ###   ##  #### ####
+#  # #  # #  #    # #    #    #  # #  # #       #
+#  # #  # #  #    # ###  #    ###  #    ###    #
+#  # ###  #  #    # #    #    #  # #    #     #
+#  # #    #  # #  # #    #    #  # #  # #    #
+ ##  #     ##   ##  #    #### ###   ##  #### ####
+
         res = "UPOJFLBCEZ"
 
         self.solve("2", res)
+
 
 if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

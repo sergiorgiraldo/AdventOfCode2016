@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/1
 
-import sys
-sys.path.insert(0,"..")
-
 from base.advent import *
+import sys
+sys.path.insert(0, "..")
+
 
 class Solution(InputAsStringSolution):
     _year = 2016
@@ -14,12 +14,12 @@ class Solution(InputAsStringSolution):
         x, y = 0, 0
         for instruction in instructions:
             direction, offset = instruction[0], int(instruction[1:])
-            faceX, faceY = (faceY, -faceX) if direction == 'R' else (-faceY, faceX)
+            faceX, faceY = (
+                faceY, -faceX) if direction == 'R' else (-faceY, faceX)
             x += faceX * offset
             y += faceY * offset
 
         return abs(x) + abs(y)
-
 
     def first_duplicate(self, instructions):
         faceX, faceY = 0, 1
@@ -28,7 +28,8 @@ class Solution(InputAsStringSolution):
 
         for instruction in instructions:
             direction, offset = instruction[0], int(instruction[1:])
-            faceX, faceY = (faceY, -faceX) if direction == 'R' else (-faceY, faceX)
+            faceX, faceY = (
+                faceY, -faceX) if direction == 'R' else (-faceY, faceX)
 
             for _ in range(offset):
                 x += faceX
@@ -39,7 +40,6 @@ class Solution(InputAsStringSolution):
                     return abs(x) + abs(y)
 
         return abs(x) + abs(y)
-
 
     def part_1(self):
         arr = self.input.split(", ")
@@ -52,6 +52,7 @@ class Solution(InputAsStringSolution):
         res = self.first_duplicate(arr)
 
         self.solve("2", res)
+
 
 if __name__ == "__main__":
     solution = Solution()

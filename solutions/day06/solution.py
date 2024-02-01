@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/6
+from base.advent import *
 from collections import Counter
 import sys
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
-from base.advent import *
 
 class Solution(InputAsLinesSolution):
     _year = 2016
@@ -25,9 +25,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res)
 
+
 if __name__ == '__main__':
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

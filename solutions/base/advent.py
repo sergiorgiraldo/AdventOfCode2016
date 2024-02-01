@@ -1,32 +1,35 @@
 from pathlib import Path
 from aocd import submit
-from os import path;
+from os import path
 from abc import ABC, abstractmethod
 from typing import final
+
 
 class AoCException(Exception):
     pass
 
 # Abstract Solution
+
+
 class BaseSolution(ABC):
     _year: int
     _day: int
 
-    def __init__(cls, lines = False, csv = False, two_dimensional = False):
+    def __init__(cls, lines=False, csv=False, two_dimensional=False):
         if lines:
             cls.input = cls.read_input().splitlines()
-        else:  
+        else:
             if csv:
                 lines = cls.read_input().splitlines()
 
                 cls.input = [line.split(",") for line in lines]
-            else:    
+            else:
                 if two_dimensional:
                     lines = cls.read_input().splitlines()
 
                     cls.input = [list(line) for line in lines]
-                else: #if string:   
-                    cls.input = cls.read_input()  
+                else:  # if string:
+                    cls.input = cls.read_input()
 
     @property
     def year(self):
@@ -41,7 +44,7 @@ class BaseSolution(ABC):
         return self._day
 
     @abstractmethod
-    def dummy(self): #prevent usage of BaseSolution
+    def dummy(self):  # prevent usage of BaseSolution
         pass
 
     @final
@@ -65,7 +68,7 @@ class BaseSolution(ABC):
                 f'Found a file at path "./{input_file.relative_to(Path.cwd())}", but it was empty. Make sure to paste some input!'
             )
         return data
-    
+
     @final
     def save(self, part, res):
         answer_path = Path(
@@ -73,30 +76,34 @@ class BaseSolution(ABC):
             f"ans{part}.txt",
         )
 
-        if path.exists(answer_path): 
-            open(answer_path, 'w').close() # always overwrite
+        if path.exists(answer_path):
+            open(answer_path, 'w').close()  # always overwrite
 
-        with(answer_path.open("a")) as f:
+        with (answer_path.open("a")) as f:
             f.write(res)
 
     @final
     def submit(self, part, res):
         submit(res, part=part, day=self.day, year=self.year)
 
-    def solve(self, part, res, submit = True):
+    def solve(self, part, res, submit=True):
         self.save(part, str(res))
 
         print(f"Part {part} :: {res}")
 
-        if submit:self.submit(part = "a" if part == "1" else "b" , res = res)
+        if submit:
+            self.submit(part="a" if part == "1" else "b", res=res)
 
 # Concrete Solutions
+
+
 class InputAsStringSolution(BaseSolution):
     def __init__(self):
         super().__init__(lines=False, csv=False, two_dimensional=False)
-    
+
     def dummy(self):
         pass
+
 
 class InputAsLinesSolution(BaseSolution):
     def __init__(self):
@@ -105,12 +112,14 @@ class InputAsLinesSolution(BaseSolution):
     def dummy(self):
         pass
 
+
 class InputAsCSVSolution(BaseSolution):
     def __init__(self):
         super().__init__(lines=False, csv=True, two_dimensional=False)
 
     def dummy(self):
         pass
+
 
 class InputAs2DSolution(BaseSolution):
     def __init__(self):

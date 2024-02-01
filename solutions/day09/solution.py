@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/9
+from base.advent import *
 import re
 import sys
-sys.path.insert(0,"..")
+sys.path.insert(0, "..")
 
-from base.advent import *
 
 class Solution(InputAsStringSolution):
     _year = 2016
@@ -39,7 +39,7 @@ class Solution(InputAsStringSolution):
             yield match.start() + sum(self.get_decompressed_string_v2(arg[end:end+chars])) * num
 
             arg = arg[end+chars:]
-        
+
     def part_1(self):
         arg = self.get_decompressed_string(self.input)
 
@@ -54,9 +54,10 @@ class Solution(InputAsStringSolution):
 
         self.solve("2", res)
 
+
 if __name__ == '__main__':
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()
