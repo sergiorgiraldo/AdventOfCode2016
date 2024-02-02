@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/6
-from base.advent import *
-from collections import Counter
+
 import sys
 sys.path.insert(0, "..")
-
+from base.advent import *
+from collections import Counter
 
 class Solution(InputAsLinesSolution):
     _year = 2016

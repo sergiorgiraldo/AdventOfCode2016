@@ -1,12 +1,12 @@
 # puzzle prompt: https://adventofcode.com/2016/day/11
 
+import sys
+sys.path.insert(0, "..")
 from base.utils import shortest_path
 from base.advent import *
 from typing import NamedTuple
 import itertools as it
 from parse import findall
-import sys
-sys.path.insert(0, "..")
 
 
 class FloorState(NamedTuple):

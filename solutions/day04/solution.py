@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/4
 
-from base.advent import *
 import sys
-import string
 sys.path.insert(0, "..")
+from base.advent import *
+import string
 
 
 class Solution(InputAsLinesSolution):

@@ -1,10 +1,10 @@
 # puzzle prompt: https://adventofcode.com/2016/day/5
 
+import sys
+sys.path.insert(0, "..")
 from base.advent import *
 from itertools import count
 from hashlib import md5
-import sys
-sys.path.insert(0, "..")
 
 
 class Solution(InputAsStringSolution):

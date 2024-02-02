@@ -1,0 +1,53 @@
+# puzzle prompt: https://adventofcode.com/2016/day/13
+
+import sys
+sys.path.insert(0,"..")
+from collections import deque
+from base.advent import *
+
+class Solution(InputAsStringSolution):
+    _year = 2016
+    _day = 13
+
+    def is_allowed(self, x, y, favorite):
+        p = x**2 + 2*x*y + y**2 + 3*x + y + favorite
+
+        return x >= 0 and y >= 0 and not format(p, "b").count("1") % 2
+
+
+    def walk_the_maze(self, start, favorite, pt, target):
+        queue, visited = deque([(start, 0)]), {}
+        moves = ((-1, 0), (1, 0), (0, -1), (0, 1))
+        while queue:
+            vertex, depth = queue.popleft()
+
+            if pt == 1:
+                if vertex == target:
+                    return depth
+            else: #pt == 2
+                if depth > target:
+                    continue
+
+            visited[vertex] = depth
+            for next in ((vertex[0] + dx, vertex[1] + dy) for dx, dy in moves):
+                if next not in visited and self.is_allowed(*next, favorite):
+                    queue.append((next, depth + 1))
+
+        return visited
+
+    def part_1(self):
+        visited = self.walk_the_maze((1, 1), int(self.input), 1, (31, 39))
+
+        self.solve("1", visited)
+
+    def part_2(self):
+        visited = self.walk_the_maze((1, 1), int(self.input), 2, 50)
+
+        self.solve("2", len(visited))
+
+if __name__ == "__main__":
+    solution = Solution()
+
+    solution.part_1()
+    
+    solution.part_2()
