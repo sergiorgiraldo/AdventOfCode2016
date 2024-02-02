@@ -1,10 +1,10 @@
 # puzzle prompt: https://adventofcode.com/2016/day/4
 
 import sys
-import string
-sys.path.insert(0,"..")
-
+sys.path.insert(0, "..")
 from base.advent import *
+import string
+
 
 class Solution(InputAsLinesSolution):
     _year = 2016
@@ -12,8 +12,10 @@ class Solution(InputAsLinesSolution):
 
     def get_sector_real_rooms(self, rooms):
         sum = 0
-        for room in rooms:                  # e.g udglrdfwlyh-gbh-ilqdqflqj-439[otyms]
-            *name, last = room.split("-")   # udglrdfwlyh-gbh-ilqdqflqj / 439[otyms]
+        # e.g udglrdfwlyh-gbh-ilqdqflqj-439[otyms]
+        for room in rooms:
+            # udglrdfwlyh-gbh-ilqdqflqj / 439[otyms]
+            *name, last = room.split("-")
             id, check = last.split("[")     # 439 / otyms]
             sector = "".join(name)          # udglrdfwlyhgbhilqdqflqj
             checksum = sorted({*sector}, key=lambda x: (-sector.count(x), x))
@@ -44,9 +46,10 @@ class Solution(InputAsLinesSolution):
 
         self.solve("2", res)
 
+
 if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

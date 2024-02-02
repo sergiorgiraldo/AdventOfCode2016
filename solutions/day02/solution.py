@@ -1,9 +1,9 @@
 # puzzle prompt: https://adventofcode.com/2016/day/2
 
 import sys
-sys.path.insert(0,"..")
-
+sys.path.insert(0, "..")
 from base.advent import *
+
 
 class Solution(InputAsLinesSolution):
     _year = 2016
@@ -11,9 +11,9 @@ class Solution(InputAsLinesSolution):
 
     def get_bathroom_code(self, instructions):
         keypad = [
-                [1, 2, 3],
-                [4, 5, 6],
-                [7, 8, 9]]
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]]
 
         keypad, code = [*zip(*keypad[::-1])], []
 
@@ -41,11 +41,11 @@ class Solution(InputAsLinesSolution):
 
     def get_bathroom_code_cross(self, instructions):
         keypad = [
-                [...,..., 1 ,...,...],
-                [..., 2 , 3 , 4 ,...],
-                [ 5 , 6 , 7 , 8 , 9 ],
-                [...,'A','B','C',...],
-                [...,...,'D',...,...]]
+            [..., ..., 1, ..., ...],
+            [..., 2, 3, 4, ...],
+            [5, 6, 7, 8, 9],
+            [..., 'A', 'B', 'C', ...],
+            [..., ..., 'D', ..., ...]]
 
         keypad, code = [*zip(*keypad[::-1])], []
 
@@ -76,11 +76,11 @@ class Solution(InputAsLinesSolution):
 
         self.solve("1", res)
 
-
     def part_2(self):
         res = self.get_bathroom_code_cross(self.input)
 
         self.solve("2", res)
+
 
 if __name__ == '__main__':
     solution = Solution()

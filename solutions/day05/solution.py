@@ -1,11 +1,11 @@
 # puzzle prompt: https://adventofcode.com/2016/day/5
 
+import sys
+sys.path.insert(0, "..")
+from base.advent import *
 from itertools import count
 from hashlib import md5
-import sys
-sys.path.insert(0,"..")
 
-from base.advent import *
 
 class Solution(InputAsStringSolution):
     _year = 2016
@@ -20,7 +20,6 @@ class Solution(InputAsStringSolution):
                 pwd += digest[5]
                 if len(pwd) == 8:
                     return pwd
-
 
     def get_password_positioned(self, door_id):
         pwd = {}
@@ -40,7 +39,7 @@ class Solution(InputAsStringSolution):
 
                 if len(pwd) == 8:
                     return "".join([v for k, v in sorted(pwd.items())])
-                
+
     def part_1(self):
         res = self.get_password(self.input)
 
@@ -51,9 +50,10 @@ class Solution(InputAsStringSolution):
 
         self.solve("2", res)
 
+
 if __name__ == "__main__":
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()

@@ -6,10 +6,8 @@ solution = Solution()
 
 class Tests(unittest.TestCase):
     def test_part1(self):
-        self.assertEqual(solution.part1(), "", "Oops")
-
-    #def test_part2(self):
-    #    self.assertEqual(solution.part2(), "", "Oops")
+        visited = solution.walk_the_maze((1, 1), 10, 1, (7,4))
+        self.assertEqual(visited, 11, "Oops")
 
     def test_sanity_check(self):
         self.assertEqual(1 + 1, 2, "Oops")

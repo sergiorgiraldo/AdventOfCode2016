@@ -1,10 +1,10 @@
 # puzzle prompt: https://adventofcode.com/2016/day/3
 
 import sys
-sys.path.insert(0,"..")
-
-from base.advent import *
+sys.path.insert(0, "..")
 import re
+from base.advent import *
+
 
 class Solution(InputAsLinesSolution):
     _year = 2016
@@ -19,12 +19,12 @@ class Solution(InputAsLinesSolution):
     def get_valid_triangles_By_columns(self, triangles):
         return sum(
             (a + b > c and b + c > a and a + c > b)
-            for col in zip(*triangles) 
+            for col in zip(*triangles)
             for a, b, c in zip(*[iter(col)]*3)
         )
 
     def get_triangles(self, arr):
-        triangles = [];
+        triangles = []
         for i in range(len(arr)):
             pattern = r'\d+'
             numbers = tuple(map(int, re.findall(pattern, arr[i])))
@@ -33,22 +33,23 @@ class Solution(InputAsLinesSolution):
         return triangles
 
     def part_1(self):
-        triangles = self.get_triangles(self.input);
+        triangles = self.get_triangles(self.input)
 
         res = self.get_valid_triangles_By_rows(triangles)
 
         self.solve("1", res)
 
     def part_2(self):
-        triangles = self.get_triangles(self.input);
+        triangles = self.get_triangles(self.input)
 
         res = self.get_valid_triangles_By_columns(triangles)
 
         self.solve("2", res)
 
+
 if __name__ == '__main__':
     solution = Solution()
 
     solution.part_1()
-    
+
     solution.part_2()
