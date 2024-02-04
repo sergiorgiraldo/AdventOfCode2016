@@ -25,6 +25,8 @@ if __name__ == "__main__":
     Path(__index).write_text(contents_index)
 
     __page = os.path.join("viewer", f"day{__day}.html")
-    contents_day = "<h1>Day " + __day + "</h1>\n"
-    contents_day = contents_day + "<pre>\n" + contents_script + "\n</pre>"
+    contents_day = "<style>pre{font-size: large;}</style>\n"
+    contents_day += "<h1>Day " + __day + "</h1>\n"
+    contents_day += "<pre>\n" + contents_script + "\n</pre>"
     Path(__page).write_text(contents_day)
+
