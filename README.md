@@ -20,6 +20,8 @@ My solutions to [Advent of Code 2016](https://adventofcode.com/2016) done in Pyt
 
 ### `./start`
 
+### `./build-viewer [day]`
+
 #### Usage
 
 > `./start [-h] [--year YEAR] [day]`

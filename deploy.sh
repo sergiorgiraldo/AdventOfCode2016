@@ -1,5 +1,7 @@
 #!/bin/sh
 
+./build-viewer $1
+
 git add --all . 
 
 git commit -S -m 'feat!: day '"$1"' completed'
