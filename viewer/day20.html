@@ -1,0 +1,56 @@
+<style>pre{font-size: large;}</style>
+<h1>Day 20</h1>
+<pre>
+# puzzle prompt: https://adventofcode.com/2016/day/20
+
+import sys
+sys.path.insert(0,"..")
+
+from base.advent import *
+
+class Solution(InputAsLinesSolution):
+    _year = 2016
+    _day = 20
+
+    def allowed(self, ip_list, n):
+        blocked = [tuple(map(int, x.split('-'))) for x in ip_list]
+
+        rng, *blocked = sorted([*r] for r in blocked)
+
+        for cur in blocked:
+            if cur[0] > n:
+                break
+            elif cur[0] > rng[-1] + 1:
+                yield from range(rng[-1] + 1, cur[0])
+                rng = cur
+            else:
+                rng[-1] = max(rng[-1], cur[-1])
+
+        yield from range(rng[-1] + 1, n + 1)
+
+    def get_allowed(self, ip_list, max):
+        ips = list(self.allowed(ip_list, max))
+        total = len(ips)
+        for _, x in enumerate(ips, start=1):
+            lowest =  x
+            break
+
+        return (lowest, total)
+
+    def part_1(self):
+        res = self.get_allowed(self.input, 2**32 - 1)[0] # 2**32 - 1 is the biggest ip number
+
+        self.solve("1", res)
+
+    def part_2(self):
+        res = self.get_allowed(self.input, 2**32 - 1)[1]
+
+        self.solve("2", res)
+
+if __name__ == '__main__':
+    solution = Solution()
+
+    solution.part_1()
+    
+    solution.part_2()
+</pre>
