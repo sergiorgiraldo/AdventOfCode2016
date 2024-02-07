@@ -1,0 +1,67 @@
+# puzzle prompt: https://adventofcode.com/2016/day/21
+
+import sys
+sys.path.insert(0,"..")
+
+from base.advent import *
+from itertools import permutations
+
+class Solution(InputAsLinesSolution):
+    _year = 2016
+    _day = 21
+
+    def scramble(self, instructions, string):
+        password = string
+
+        for instruction in instructions:
+            tokens = instruction.split()
+            values = [int(x) for x in tokens if x.isdigit()]
+            if instruction.startswith("swap position"):
+                temp = list(password)
+                temp[values[1]], temp[values[0]] = temp[values[0]], temp[values[1]]
+                password = "".join(temp)
+            elif instruction.startswith("swap letter"):
+                password = password.translate(str.maketrans(tokens[2] + tokens[-1], tokens[-1] + tokens[2]))
+            elif instruction.startswith("reverse"):
+                x, y = values
+                password = password[:x] + password[x:y+1][::-1] + password[y+1:]
+            elif instruction.startswith("move"):
+                temp = list(password)
+                temp.insert(values[-1], temp.pop(values[0]))
+                password = "".join(temp)
+            elif instruction.startswith("rotate based"):
+                pos = password.index(instruction[-1])
+                rot = (1 + pos + (pos >= 4)) % len(password)
+                password = password[-rot:] + password[:-rot]
+            else:
+                # left/right
+                x = values[0]
+                if tokens[1] != "left":
+                    x *= -1
+                password = password[x:] + password[:x]
+
+        return password
+
+
+    def unscramble(self, instructions, secret):
+        for p in permutations(secret): #since we only scramble, the original string is a permutation
+            guess = "".join(p)
+            if self.scramble(instructions, guess) == secret:
+                return guess
+        
+    def part_1(self):
+        res = self.scramble(self.input, "abcdefgh")
+
+        self.solve("1", res)
+
+    def part_2(self):
+        res = self.unscramble(self.input, "fbgdceah")
+
+        self.solve("2", res)
+
+if __name__ == "__main__":
+    solution = Solution()
+
+    solution.part_1()
+    
+    solution.part_2()
