@@ -14,7 +14,8 @@ class Tests(unittest.TestCase):
             "jnz a 2",
             "dec a"
         ]
-        regs = solution.interpret(input, dict(a=0, b=0, c=0, d=0))
+        code = [solution.parse(line) for line in input]
+        regs = solution.run(code, dict(a=0, b=0, c=0, d=0))
         self.assertEqual(regs["a"], 42, "Oops")
 
     def test_sanity_check(self):
