@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [14.0.0](https://github.com/sergiorgiraldo/AdventOfCode2016/compare/v13.0.0...v14.0.0) (2024-02-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* day 25 completed
+
+### Features
+
+* day 25 completed ([7da1936](https://github.com/sergiorgiraldo/AdventOfCode2016/commit/7da19364beccf94e6dd0b6a80a31af7914fc894c))
+
 ## [13.0.0](https://github.com/sergiorgiraldo/AdventOfCode2016/compare/v12.0.0...v13.0.0) (2024-02-08)
 
 
