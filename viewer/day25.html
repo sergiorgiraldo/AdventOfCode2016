@@ -33,3 +33,69 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 25</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/25</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from collections import Counter</span>
+<span>from itertools import count</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 25</span>
+<span></span>
+<span>    def run(self, code, registers):</span>
+<span>        def val(x): return (registers[x] if x in registers else x)</span>
+<span>            </span>
+<span>        current = 0</span>
+<span></span>
+<span>        while 0 <= current < len(code):</span>
+<span>            instruction = code[current]</span>
+<span>            op, x, y = instruction[0], instruction[1], instruction[-1]</span>
+<span>            current += 1</span>
+<span>            if   op == "cpy" and y in registers: registers[y] = val(x)</span>
+<span>            elif op == "inc":               registers[x] += 1                  </span>
+<span>            elif op == "dec":               registers[x] -= 1                  </span>
+<span>            elif op == "jnz" and val(x):    current += val(y) - 1   </span>
+<span>            elif op == "tgl":               self.toggle(code, current - 1 + val(x))</span>
+<span>            elif op == "out":               yield val(x)</span>
+<span>        return registers</span>
+<span></span>
+<span>    def toggle(self, code, i):</span>
+<span>        if 0 <= i < len(code): </span>
+<span>            instruction = code[i]</span>
+<span>            instruction[0] = (</span>
+<span>                    "dec" if instruction[0] == "inc"   else </span>
+<span>                    "inc" if len(instruction) == 2     else</span>
+<span>                    "cpy" if instruction[0] == "jnz"   else </span>
+<span>                    "jnz")</span>
+<span></span>
+<span>    def parse(self, line): </span>
+<span>        return [(x if x.isalpha() else int(x)) </span>
+<span>                for x in line.split()]</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        code = [self.parse(line) for line in self.input]</span>
+<span></span>
+<span>        for i in count():</span>
+<span>            if all(x == y </span>
+<span>                   for x, y in </span>
+<span>                   zip(self.run(code, dict(a=i, b=0, c=0, d=0)), (0, 1) * 10)): #10 seems a good repeating pattern</span>
+<span>                res = i</span>
+<span>                break</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        pass</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

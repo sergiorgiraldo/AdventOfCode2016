@@ -33,3 +33,66 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 01</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/1</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 1</span>
+<span></span>
+<span>    def shortest_path(self, instructions):</span>
+<span>        faceX, faceY = 0, 1</span>
+<span>        x, y = 0, 0</span>
+<span>        for instruction in instructions:</span>
+<span>            direction, offset = instruction[0], int(instruction[1:])</span>
+<span>            faceX, faceY = (</span>
+<span>                faceY, -faceX) if direction == 'R' else (-faceY, faceX)</span>
+<span>            x += faceX * offset</span>
+<span>            y += faceY * offset</span>
+<span></span>
+<span>        return abs(x) + abs(y)</span>
+<span></span>
+<span>    def first_duplicate(self, instructions):</span>
+<span>        faceX, faceY = 0, 1</span>
+<span>        x, y = 0, 0</span>
+<span>        locations = {(x, y)}</span>
+<span></span>
+<span>        for instruction in instructions:</span>
+<span>            direction, offset = instruction[0], int(instruction[1:])</span>
+<span>            faceX, faceY = (</span>
+<span>                faceY, -faceX) if direction == 'R' else (-faceY, faceX)</span>
+<span></span>
+<span>            for _ in range(offset):</span>
+<span>                x += faceX</span>
+<span>                y += faceY</span>
+<span>                if (x, y) not in locations:</span>
+<span>                    locations.add((x, y))</span>
+<span>                else:</span>
+<span>                    return abs(x) + abs(y)</span>
+<span></span>
+<span>        return abs(x) + abs(y)</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        arr = self.input.split(", ")</span>
+<span>        res = self.shortest_path(arr)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        arr = self.input.split(", ")</span>
+<span>        res = self.first_duplicate(arr)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span>    solution.part_1()</span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

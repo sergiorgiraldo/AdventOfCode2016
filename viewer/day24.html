@@ -33,3 +33,67 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 24</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/24</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from itertools import permutations, combinations</span>
+<span>from collections import deque</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 24</span>
+<span></span>
+<span>    def bfs(self, map, start, end):</span>
+<span>        queue = deque([(start, 0)])</span>
+<span>        moves = ((-1, 0), (1, 0), (0, -1), (0, 1))</span>
+<span>        visited = {start}</span>
+<span></span>
+<span>        while queue:</span>
+<span>            vertex, path = queue.popleft()</span>
+<span>            if vertex == end:</span>
+<span>                return path</span>
+<span></span>
+<span>            for nxt in ((vertex[0] + i, vertex[1] + j) for i, j in moves):</span>
+<span>                if nxt[0] < 0 or nxt[1] < 0 or nxt[0] >= len(map) or nxt[1] >= len(map[0]):</span>
+<span>                    continue</span>
+<span></span>
+<span>                if map[nxt[0]][nxt[1]] != '#' and nxt not in visited:</span>
+<span>                    queue.append((nxt, path + 1))</span>
+<span>                    visited.add(nxt)</span>
+<span></span>
+<span>    def walk_the_map(self, map, should_return=False):     </span>
+<span>        paths = {}</span>
+<span>        </span>
+<span>        nums = {int(x): (i, j) for i, y in enumerate(map)</span>
+<span>                                for j, x in enumerate(y) if x.isdigit()}</span>
+<span></span>
+<span>        for a, b in combinations(sorted(nums), 2):</span>
+<span>            paths[a, b] = paths[b, a] = self.bfs(map, nums[a], nums[b])</span>
+<span></span>
+<span>        perms = list(permutations(range(1, len(nums))))</span>
+<span></span>
+<span>        steps = min(sum(paths[x] for x in zip((0,) + p,  p + (0,) if should_return else p)) for p in perms)</span>
+<span></span>
+<span>        return steps</span>
+<span>    </span>
+<span>    def part_1(self):</span>
+<span>        res = self.walk_the_map(self.input, False)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.walk_the_map(self.input, True)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

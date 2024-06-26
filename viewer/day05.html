@@ -33,3 +33,65 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 05</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/5</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span>from itertools import count</span>
+<span>from hashlib import md5</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 5</span>
+<span></span>
+<span>    def get_password(self, door_id):</span>
+<span>        pwd = ""</span>
+<span></span>
+<span>        for i in count():</span>
+<span>            digest = md5(f"{door_id}{i}".encode()).hexdigest()</span>
+<span>            if digest.startswith("00000"):</span>
+<span>                pwd += digest[5]</span>
+<span>                if len(pwd) == 8:</span>
+<span>                    return pwd</span>
+<span></span>
+<span>    def get_password_positioned(self, door_id):</span>
+<span>        pwd = {}</span>
+<span></span>
+<span>        for i in count():</span>
+<span>            digest = md5(f"{door_id}{i}".encode()).hexdigest()</span>
+<span>            if digest.startswith("00000"):</span>
+<span>                if digest[5] not in {"0", "1", "2", "3", "4", "5", "6", "7"}:</span>
+<span>                    continue</span>
+<span></span>
+<span>                check = int(digest[5])</span>
+<span></span>
+<span>                if check in pwd:</span>
+<span>                    continue</span>
+<span></span>
+<span>                pwd[check] = digest[6]</span>
+<span></span>
+<span>                if len(pwd) == 8:</span>
+<span>                    return "".join([v for k, v in sorted(pwd.items())])</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_password(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_password_positioned(self.input)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

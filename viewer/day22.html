@@ -33,3 +33,148 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 22</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/22</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>import re</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 22</span>
+<span></span>
+<span>    def parse_df(self, df_output):</span>
+<span>        df_nodes = {}</span>
+<span>        for df in df_output:</span>
+<span>                if df[0] != "/":</span>
+<span>                    continue</span>
+<span>                x, y, size, used, avail, perc = map(int, re.findall(r"\d+", df))</span>
+<span>                df_nodes[(x, y)] = {"used": used, "avail": avail}</span>
+<span></span>
+<span>        return df_nodes</span>
+<span></span>
+<span>    def print_map(self, df_nodes, path = []):</span>
+<span>        lx = max([val[0] for val in df_nodes.keys()])+1</span>
+<span>        ly = max([val[1] for val in df_nodes.keys()])+1</span>
+<span></span>
+<span>        start = (0, 0)</span>
+<span>        goal = (lx-1, 0)</span>
+<span>        </span>
+<span>        empty = (None, None)</span>
+<span>        for key in df_nodes:</span>
+<span>            if df_nodes[key]["used"] == 0:</span>
+<span>                empty = key</span>
+<span>                break</span>
+<span></span>
+<span>        for y in range(ly):</span>
+<span>            for x in range(lx):</span>
+<span>                if (x, y) == goal:</span>
+<span>                    c = "{}"</span>
+<span>                elif (x, y) == start:</span>
+<span>                    c = "[]"</span>
+<span>                elif (x, y) == empty:</span>
+<span>                    c = "__"</span>
+<span>                elif (x, y) in path:</span>
+<span>                    c = "()"</span>
+<span>                else:</span>
+<span>                    c = ".." if df_nodes[(x, y)]["used"] < 85  else "##" #85 is my target to move around</span>
+<span>                print(c, end="")</span>
+<span>            print("")</span>
+<span>        print("")</span>
+<span>        </span>
+<span></span>
+<span>    def find_path(self, df_nodes, start, end, obst=None):</span>
+<span>        lx = max([val[0] for val in df_nodes.keys()])+1</span>
+<span>        ly = max([val[1] for val in df_nodes.keys()])+1</span>
+<span></span>
+<span>        # reset BFS</span>
+<span>        for value in df_nodes.values():</span>
+<span>            value["dist"] = float("inf")</span>
+<span>            value["prev"] = None</span>
+<span>        # do the actual BFS</span>
+<span>        queue = [start]</span>
+<span>        df_nodes[start]["dist"] = 0</span>
+<span>        while len(queue) > 0:</span>
+<span>            n = queue.pop(0)</span>
+<span>            for x, y in [(n[0]+1, n[1]), (n[0]-1, n[1]), (n[0], n[1]+1), (n[0], n[1]-1)]:</span>
+<span>                if 0<=x<lx and 0<=y<ly and df_nodes[(x,y)]["used"] < 100 and (x, y) != obst:</span>
+<span>                    if df_nodes[(x, y)]["dist"] > df_nodes[n]["dist"] + 1:</span>
+<span>                        df_nodes[(x, y)]["dist"] = df_nodes[n]["dist"] + 1</span>
+<span>                        df_nodes[(x, y)]["prev"] = n</span>
+<span>                        queue.append((x, y))</span>
+<span>                    if (x, y) == end:</span>
+<span>                        path = [(x, y)]</span>
+<span>                        while df_nodes[path[-1]]["prev"] != None:</span>
+<span>                            path.append(df_nodes[path[-1]]["prev"])</span>
+<span>                        return path[-2::-1] # reverse, don"t include start</span>
+<span></span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        df_nodes = self.parse_df(self.input)</span>
+<span></span>
+<span>        res = 0</span>
+<span></span>
+<span>        vals = list(df_nodes.values())</span>
+<span></span>
+<span>        for i in range(len(vals)):</span>
+<span>            for j in range(i+1, len(vals)):</span>
+<span>                if vals[i]["used"] != 0 and vals[i]["used"] <= vals[j]["avail"]:</span>
+<span>                    res += 1 </span>
+<span>                if vals[j]["used"] != 0 and vals[j]["used"] <= vals[i]["avail"]:</span>
+<span>                    res += 1</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        df_nodes = self.parse_df(self.input)</span>
+<span></span>
+<span>        lx = max([val[0] for val in df_nodes.keys()])+1</span>
+<span></span>
+<span>        start = (0, 0)</span>
+<span>        goal = (lx-1, 0)</span>
+<span></span>
+<span>        empty = (None, None)</span>
+<span>        for key in df_nodes:</span>
+<span>            if df_nodes[key]["used"] == 0:</span>
+<span>                empty = key</span>
+<span>                break</span>
+<span>        </span>
+<span>        # algorithm (S = start, G = goal)</span>
+<span>        # 1. find shortest path pGS from G to S</span>
+<span>        # 2. find shortest path p_ from _ to pG[0]</span>
+<span>        # 3. cnt += len(p_) + 1 (+1 is for swapping G <-> _ in the next step)</span>
+<span>        # 4. _ = G, G = pG.pop(0)</span>
+<span>        # 5. repeat until G = S</span>
+<span>        pathGS = self.find_path(df_nodes, goal, start)</span>
+<span>        cnt = 0</span>
+<span>        </span>
+<span>        while goal != start:</span>
+<span>            path_ = self.find_path(df_nodes, empty, pathGS.pop(0), obst=goal)</span>
+<span>            cnt += len(path_) + 1</span>
+<span></span>
+<span>            #BGN Simulation</span>
+<span>            # while len(path_) > 1:</span>
+<span>            #     os.system("clear")</span>
+<span>            #     empty = path_.pop(0)</span>
+<span>            #     self.print_map(df_nodes, path_)</span>
+<span>            #     input()</span>
+<span>            #END Simulation</span>
+<span></span>
+<span>            empty = goal</span>
+<span>            goal = path_[-1]</span>
+<span>        </span>
+<span>        self.print_map(df_nodes)</span>
+<span></span>
+<span>        self.solve("2", cnt)</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

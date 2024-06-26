@@ -33,3 +33,62 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 07</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/7</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span>import re</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 7</span>
+<span></span>
+<span>    def has_ABBA(self, s):</span>
+<span>        return any(w[:2] == w[3:1:-1] and w[0] != w[1]</span>
+<span>                   for w in zip(s, s[1:], s[2:], s[3:]))</span>
+<span></span>
+<span>    def get_ABA(self, s):</span>
+<span>        return [w for w in zip(s, s[1:], s[2:]) if w[0] == w[2] != w[1]]</span>
+<span></span>
+<span>    def get_ips_with_TLS(self, arg):</span>
+<span>        count = 0</span>
+<span>        for ip in arg:</span>
+<span>            sections = re.split(r"(\[.*?])", ip)</span>
+<span>            sup, hypernet = sections[::2], sections[1::2]</span>
+<span>            count += any(map(self.has_ABBA, sup)</span>
+<span>                         ) and not any(map(self.has_ABBA, hypernet))</span>
+<span></span>
+<span>        return count</span>
+<span></span>
+<span>    def get_ips_with_SSL(self, arg):</span>
+<span>        count = 0</span>
+<span>        for ip in arg:</span>
+<span>            sections = re.split(r"(\[.*?])", ip)</span>
+<span>            sup, hypernet = sections[::2], sections[1::2]</span>
+<span>            babs = {b + a + b for x in sup for a, b, a in self.get_ABA(x)}</span>
+<span>            count += any(bab in x for bab in babs for x in hypernet)</span>
+<span></span>
+<span>        return count</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_ips_with_TLS(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_ips_with_SSL(self.input)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

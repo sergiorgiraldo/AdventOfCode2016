@@ -66,4 +66,5 @@ span{
     lines = contents_script.split('\n') 
     wrapped_lines = [f'<span>{line}</span>' for line in lines]
     contents_script = '\n'.join(wrapped_lines)
+    contents_day += "<pre>\n" + contents_script + "\n</pre>"
     Path(__page).write_text(contents_day)

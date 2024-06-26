@@ -33,3 +33,40 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 06</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/6</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span>from collections import Counter</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 6</span>
+<span></span>
+<span>    def get_corrected_message_common(self, messages):</span>
+<span>        return "".join(Counter(c).most_common(1)[0][0] for c in zip(*messages))</span>
+<span></span>
+<span>    def get_corrected_message_uncommon(self, messages):</span>
+<span>        return "".join(Counter(c).most_common()[-1][0] for c in zip(*messages))</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_corrected_message_common(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_corrected_message_uncommon(self.input)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

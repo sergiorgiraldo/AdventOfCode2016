@@ -33,3 +33,61 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 03</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/3</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>import re</span>
+<span>from base.advent import *</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 3</span>
+<span></span>
+<span>    def get_valid_triangles_By_rows(self, triangles):</span>
+<span>        return sum(</span>
+<span>            (a + b > c and b + c > a and a + c > b)</span>
+<span>            for a, b, c in triangles</span>
+<span>        )</span>
+<span></span>
+<span>    def get_valid_triangles_By_columns(self, triangles):</span>
+<span>        return sum(</span>
+<span>            (a + b > c and b + c > a and a + c > b)</span>
+<span>            for col in zip(*triangles)</span>
+<span>            for a, b, c in zip(*[iter(col)]*3)</span>
+<span>        )</span>
+<span></span>
+<span>    def get_triangles(self, arr):</span>
+<span>        triangles = []</span>
+<span>        for i in range(len(arr)):</span>
+<span>            pattern = r'\d+'</span>
+<span>            numbers = tuple(map(int, re.findall(pattern, arr[i])))</span>
+<span>            triangles.append(numbers)</span>
+<span></span>
+<span>        return triangles</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        triangles = self.get_triangles(self.input)</span>
+<span></span>
+<span>        res = self.get_valid_triangles_By_rows(triangles)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        triangles = self.get_triangles(self.input)</span>
+<span></span>
+<span>        res = self.get_valid_triangles_By_columns(triangles)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

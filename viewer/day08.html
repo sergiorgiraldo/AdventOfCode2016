@@ -33,3 +33,67 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 08</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/8</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span>import re</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 8</span>
+<span></span>
+<span>    def display(self, instructions):</span>
+<span>        screen = [[0] * 6 for _ in range(50)]</span>
+<span></span>
+<span>        for instruction in instructions:</span>
+<span>            if instruction.startswith("rect"):</span>
+<span>                x, y = map(int, re.split("[ x]", instruction)[1:])</span>
+<span>                for j in range(x):</span>
+<span>                    for k in range(y):</span>
+<span>                        screen[j][k] = 1</span>
+<span>            else:</span>
+<span>                c, v = map(int, re.split("(?: by |=)", instruction)[-2:])</span>
+<span>                if "x=" in instruction:</span>
+<span>                    screen[c] = screen[c][-v:] + screen[c][:-v]</span>
+<span>                else:</span>
+<span>                    t = [list(x) for x in zip(*screen)]</span>
+<span>                    t[c] = t[c][-v:] + t[c][:-v]</span>
+<span>                    screen = [list(x) for x in zip(*t)]</span>
+<span></span>
+<span>        return screen</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        screen = self.display(self.input)</span>
+<span>        res = sum(sum(x) for x in screen)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        screen = self.display(self.input)</span>
+<span>        for row in zip(*screen):</span>
+<span>            print("".join(" #"[i] for i in row))</span>
+<span></span>
+<span>#  # ###   ##    ## #### #    ###   ##  #### ####</span>
+<span>#  # #  # #  #    # #    #    #  # #  # #       #</span>
+<span>#  # #  # #  #    # ###  #    ###  #    ###    #</span>
+<span>#  # ###  #  #    # #    #    #  # #    #     #</span>
+<span>#  # #    #  # #  # #    #    #  # #  # #    #</span>
+<span> ##  #     ##   ##  #    #### ###   ##  #### ####</span>
+<span></span>
+<span>        res = "UPOJFLBCEZ"</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

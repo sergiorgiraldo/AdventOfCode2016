@@ -33,3 +33,194 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 11</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/11</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.utils import shortest_path</span>
+<span>from base.advent import *</span>
+<span>from typing import NamedTuple</span>
+<span>import itertools as it</span>
+<span>from parse import findall</span>
+<span></span>
+<span></span>
+<span>class FloorState(NamedTuple):</span>
+<span>    rtgs: frozenset[str] = frozenset()</span>
+<span>    chips: frozenset[str] = frozenset()</span>
+<span></span>
+<span>    def is_safe(self):</span>
+<span>        return len(self.rtgs) == 0 or self.chips.issubset(self.rtgs)</span>
+<span></span>
+<span></span>
+<span>class BuildingState(NamedTuple):</span>
+<span>    floors: tuple[FloorState, ...]</span>
+<span>    elevator: int</span>
+<span></span>
+<span>    def is_safe(self):</span>
+<span>        return all(floor.is_safe() for floor in self.floors)</span>
+<span></span>
+<span>    def move_with(self, dir: int, rtgs=frozenset(), chips=frozenset()):</span>
+<span>        i_curr = self.elevator</span>
+<span>        i_next = self.elevator + dir</span>
+<span></span>
+<span>        floor_curr = self.floors[i_curr]</span>
+<span>        floor_next = self.floors[i_next]</span>
+<span></span>
+<span>        floor_curr_new = FloorState(</span>
+<span>            rtgs=floor_curr.rtgs.difference(rtgs),</span>
+<span>            chips=floor_curr.chips.difference(chips),</span>
+<span>        )</span>
+<span>        floor_next_new = FloorState(</span>
+<span>            rtgs=floor_next.rtgs.union(rtgs),</span>
+<span>            chips=floor_next.chips.union(chips),</span>
+<span>        )</span>
+<span></span>
+<span>        return BuildingState(</span>
+<span>            floors=tuple(</span>
+<span>                floor_curr_new</span>
+<span>                if i == i_curr</span>
+<span>                else floor_next_new</span>
+<span>                if i == i_next</span>
+<span>                else floor</span>
+<span>                for i, floor in enumerate(self.floors)</span>
+<span>            ),</span>
+<span>            elevator=i_next,</span>
+<span>        )</span>
+<span></span>
+<span>    def normalize(self) -> "BuildingState":</span>
+<span>        rtg_map = {}</span>
+<span>        chip_map = {}</span>
+<span>        elts = set()</span>
+<span>        for i, floor in enumerate(self.floors):</span>
+<span>            elts.update(floor.rtgs)</span>
+<span>            for rtg in floor.rtgs:</span>
+<span>                rtg_map[rtg] = i</span>
+<span>            for chip in floor.chips:</span>
+<span>                chip_map[chip] = i</span>
+<span>        return self.rename_by(</span>
+<span>            {</span>
+<span>                old_name: new_name</span>
+<span>                for old_name, new_name in zip(</span>
+<span>                    sorted(elts, key=lambda elt: (</span>
+<span>                        rtg_map[elt], chip_map[elt])),</span>
+<span>                    sorted(elts),</span>
+<span>                )</span>
+<span>            }</span>
+<span>        )</span>
+<span></span>
+<span>    def rename_by(self, names: dict[str, str]):</span>
+<span>        return self._replace(</span>
+<span>            floors=tuple(</span>
+<span>                FloorState(</span>
+<span>                    rtgs=frozenset(names[rtg] for rtg in floor.rtgs),</span>
+<span>                    chips=frozenset(names[chip] for chip in floor.chips),</span>
+<span>                )</span>
+<span>                for floor in self.floors</span>
+<span>            )</span>
+<span>        )</span>
+<span></span>
+<span></span>
+<span>def get_neighbors(state: BuildingState):</span>
+<span>    for dir in [-1, 1]:</span>
+<span>        elevator_next = state.elevator + dir</span>
+<span>        if 0 <= elevator_next < len(state.floors):</span>
+<span>            floor = state.floors[state.elevator]</span>
+<span>            rtgs = [(rtg, "rtg") for rtg in floor.rtgs]</span>
+<span>            chips = [(chip, "chip") for chip in floor.chips]</span>
+<span>            for combo in it.combinations(rtgs + chips, 2):</span>
+<span>                state_next = state.move_with(</span>
+<span>                    dir,</span>
+<span>                    rtgs=frozenset(</span>
+<span>                        (name for name, kind in combo if kind == "rtg")),</span>
+<span>                    chips=frozenset(</span>
+<span>                        (name for name, kind in combo if kind == "chip")),</span>
+<span>                )</span>
+<span>                if state_next.is_safe():</span>
+<span>                    yield state_next.normalize()</span>
+<span>            for rtg in floor.rtgs:</span>
+<span>                state_next = state.move_with(dir, rtgs=frozenset((rtg,)))</span>
+<span>                if state_next.is_safe():</span>
+<span>                    yield state_next.normalize()</span>
+<span>            for chip in floor.chips:</span>
+<span>                state_next = state.move_with(dir, chips=frozenset((chip,)))</span>
+<span>                if state_next.is_safe():</span>
+<span>                    yield state_next.normalize()</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 11</span>
+<span></span>
+<span>    def setup(self, lines, extra):</span>
+<span>        floors: list[FloorState] = []</span>
+<span>        elts = set()</span>
+<span></span>
+<span>        for line in lines:</span>
+<span>            rtgs = set()</span>
+<span>            chips = set()</span>
+<span>            for (rtg,) in findall("{:l} generator", line):</span>
+<span>                rtgs.add(rtg)</span>
+<span>            for (chip,) in findall("{:l}-compatible microchip", line):</span>
+<span>                chips.add(chip)</span>
+<span>            elts.update(rtgs)</span>
+<span>            floors.append(FloorState(</span>
+<span>                rtgs=frozenset(rtgs), chips=frozenset(chips)))</span>
+<span></span>
+<span>        initial1 = BuildingState(tuple(floors), 0)</span>
+<span>        final1 = BuildingState(</span>
+<span>            floors=(FloorState(),) * (len(floors) - 1)</span>
+<span>            + (FloorState(rtgs=frozenset(elts), chips=frozenset(elts)),),</span>
+<span>            elevator=len(floors) - 1,</span>
+<span>        )</span>
+<span></span>
+<span>        if extra:</span>
+<span>            new_elements = {"elerium", "dilithium"}</span>
+<span>            initial2 = initial1._replace(</span>
+<span>                floors=(</span>
+<span>                    FloorState(</span>
+<span>                        rtgs=initial1.floors[0].rtgs.union(new_elements),</span>
+<span>                        chips=initial1.floors[0].chips.union(new_elements),</span>
+<span>                    ),</span>
+<span>                )</span>
+<span>                + initial1.floors[1:]</span>
+<span>            )</span>
+<span>            final2 = final1._replace(</span>
+<span>                floors=final1.floors[:-1]</span>
+<span>                + (</span>
+<span>                    FloorState(</span>
+<span>                        rtgs=final1.floors[-1].rtgs.union(new_elements),</span>
+<span>                        chips=final1.floors[-1].chips.union(new_elements),</span>
+<span>                    ),</span>
+<span>                )</span>
+<span>            )</span>
+<span>            return (initial2, final2)</span>
+<span>        else:</span>
+<span>            return (initial1, final1)</span>
+<span></span>
+<span>    def find_shortest(self, lines, extra=False):</span>
+<span>        (initial, final) = self.setup(lines, extra)</span>
+<span></span>
+<span>        res = shortest_path(initial, final, get_neighbors)</span>
+<span></span>
+<span>        return res</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.find_shortest(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.find_shortest(self.input, True)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

@@ -33,3 +33,58 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 13</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/13</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span>from collections import deque</span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 13</span>
+<span></span>
+<span>    def is_allowed(self, x, y, favorite):</span>
+<span>        p = x**2 + 2*x*y + y**2 + 3*x + y + favorite</span>
+<span></span>
+<span>        return x >= 0 and y >= 0 and not format(p, "b").count("1") % 2</span>
+<span></span>
+<span></span>
+<span>    def walk_the_maze(self, start, favorite, pt, target):</span>
+<span>        queue, visited = deque([(start, 0)]), {}</span>
+<span>        moves = ((-1, 0), (1, 0), (0, -1), (0, 1))</span>
+<span>        while queue:</span>
+<span>            vertex, depth = queue.popleft()</span>
+<span></span>
+<span>            if pt == 1:</span>
+<span>                if vertex == target:</span>
+<span>                    return depth</span>
+<span>            else: #pt == 2</span>
+<span>                if depth > target:</span>
+<span>                    continue</span>
+<span></span>
+<span>            visited[vertex] = depth</span>
+<span>            for next in ((vertex[0] + dx, vertex[1] + dy) for dx, dy in moves):</span>
+<span>                if next not in visited and self.is_allowed(*next, favorite):</span>
+<span>                    queue.append((next, depth + 1))</span>
+<span></span>
+<span>        return visited</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        visited = self.walk_the_maze((1, 1), int(self.input), 1, (31, 39))</span>
+<span></span>
+<span>        self.solve("1", visited)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        visited = self.walk_the_maze((1, 1), int(self.input), 2, 50)</span>
+<span></span>
+<span>        self.solve("2", len(visited))</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

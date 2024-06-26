@@ -33,3 +33,64 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 17</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/17</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from itertools import compress</span>
+<span>from collections import deque</span>
+<span>from hashlib import md5</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 17</span>
+<span></span>
+<span>    moves = {</span>
+<span>        "U": ( 0, -1),</span>
+<span>        "D": ( 0,  1),</span>
+<span>        "L": (-1,  0),</span>
+<span>        "R": ( 1,  0)</span>
+<span>    }</span>
+<span></span>
+<span>    def is_open(self, passcode, vertex, dirs):</span>
+<span>        chars = md5(f"{passcode}{dirs}".encode()).hexdigest()[:4]</span>
+<span>        for direction, (dx, dy) in compress(self.moves.items(), (c in "bcdef" for c in chars)):</span>
+<span>            next = (vertex[0] + dx, vertex[1] + dy)</span>
+<span>            if 0 <= next[0] <= 3 and 0 <= next[1] <= 3: #inbounds</span>
+<span>                yield direction, next</span>
+<span></span>
+<span></span>
+<span>    def walk_the_rooms(self, passcode):</span>
+<span>        start = (0, 0)</span>
+<span>        end = (3, 3)</span>
+<span>        queue = deque([(start, "")])</span>
+<span>        while queue:</span>
+<span>            vertex, directions = queue.popleft()</span>
+<span>            for direction, next in self.is_open(passcode, vertex, directions):</span>
+<span>                if next == end:</span>
+<span>                    yield directions + direction</span>
+<span>                else:</span>
+<span>                    queue.append((next, directions + direction))</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        directions = list(self.walk_the_rooms(self.input))</span>
+<span>        res = directions[0]</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        directions = list(self.walk_the_rooms(self.input))</span>
+<span>        res = len(directions[-1])</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

@@ -33,3 +33,106 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 19</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/19</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>import collections</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 19</span>
+<span></span>
+<span>    # part 1 is a solution to the Josephus problem</span>
+<span>    # https://en.wikipedia.org/wiki/Josephus_problem</span>
+<span>    # https://www.youtube.com/watch?v=uCsD3ZGzMgE</span>
+<span>    def get_lucky_elf(self, group_size):</span>
+<span>        return int("0b" + bin(group_size)[3:] + "1", 2)</span>
+<span></span>
+<span>#  Odd ########################</span>
+<span>#   1</span>
+<span># 5   2</span>
+<span>#  4 3</span>
+<span> </span>
+<span>#   1           1</span>
+<span># 5   2  -->  5   2</span>
+<span>#  4 -          4</span>
+<span> </span>
+<span>#   1         1 </span>
+<span># -   2  -->     2</span>
+<span>#   4         4 </span>
+<span> </span>
+<span>#  -          2  </span>
+<span>#     2  --></span>
+<span>#  4          4</span>
+<span> </span>
+<span>#  2</span>
+<span>#     -->  2  </span>
+<span>#  -          </span>
+<span>#  Even ########################</span>
+<span>#   1</span>
+<span># 6   2</span>
+<span># 5   3</span>
+<span>#   4 </span>
+<span>  </span>
+<span>#   1</span>
+<span># 6   2 </span>
+<span>#  5 3</span>
+<span> </span>
+<span>#   1           1</span>
+<span># -   2  -->  5   2</span>
+<span>#  5 3          3</span>
+<span> </span>
+<span>#   -           2 </span>
+<span># 5   2  -->  5</span>
+<span>#   3           3 </span>
+<span></span>
+<span>#    5          5  </span>
+<span># 2      --></span>
+<span>#    -          2</span>
+<span> </span>
+<span>#  -</span>
+<span>#     -->  2  </span>
+<span>#  2</span>
+<span></span>
+<span></span>
+<span>    def get_lucky_elf_across_circle(self, group_size):</span>
+<span>        left = collections.deque()</span>
+<span>        right = collections.deque()</span>
+<span>        for i in range(1, group_size + 1):</span>
+<span>            if i < (group_size // 2) + 1:</span>
+<span>                left.append(i)</span>
+<span>            else:</span>
+<span>                right.appendleft(i)</span>
+<span></span>
+<span>        while left and right:</span>
+<span>            if len(left) > len(right):</span>
+<span>                left.pop()</span>
+<span>            else:</span>
+<span>                right.pop()</span>
+<span></span>
+<span>            # rotate</span>
+<span>            right.appendleft(left.popleft())</span>
+<span>            left.append(right.pop())</span>
+<span>        return left[0] or right[0]</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_lucky_elf(int(self.input))</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_lucky_elf_across_circle(int(self.input))</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

@@ -33,3 +33,61 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 04</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/4</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span>import string</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 4</span>
+<span></span>
+<span>    def get_sector_real_rooms(self, rooms):</span>
+<span>        sum = 0</span>
+<span>        # e.g udglrdfwlyh-gbh-ilqdqflqj-439[otyms]</span>
+<span>        for room in rooms:</span>
+<span>            # udglrdfwlyh-gbh-ilqdqflqj / 439[otyms]</span>
+<span>            *name, last = room.split("-")</span>
+<span>            id, check = last.split("[")     # 439 / otyms]</span>
+<span>            sector = "".join(name)          # udglrdfwlyhgbhilqdqflqj</span>
+<span>            checksum = sorted({*sector}, key=lambda x: (-sector.count(x), x))</span>
+<span>            if checksum[:5] == [*check.strip("]")]:</span>
+<span>                sum += int(id)</span>
+<span></span>
+<span>        return sum</span>
+<span></span>
+<span>    def get_sector_north_pole(self, rooms):</span>
+<span>        for room in rooms:</span>
+<span>            *name, last = room.split("-")</span>
+<span>            id = int(last.split("[")[0])</span>
+<span>            for word in name:</span>
+<span>                decrypted = self.decrypt(word, id)</span>
+<span>                if "north" in decrypted:</span>
+<span>                    return id</span>
+<span></span>
+<span>    def decrypt(self, cypher, id):</span>
+<span>        return "".join(string.ascii_lowercase[(ord(c) - ord("a") + id) % 26] for c in cypher)</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_sector_real_rooms(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_sector_north_pole(self.input)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span></span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

@@ -33,3 +33,72 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 21</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/21</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span>from itertools import permutations</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 21</span>
+<span></span>
+<span>    def scramble(self, instructions, string):</span>
+<span>        password = string</span>
+<span></span>
+<span>        for instruction in instructions:</span>
+<span>            tokens = instruction.split()</span>
+<span>            values = [int(x) for x in tokens if x.isdigit()]</span>
+<span>            if instruction.startswith("swap position"):</span>
+<span>                temp = list(password)</span>
+<span>                temp[values[1]], temp[values[0]] = temp[values[0]], temp[values[1]]</span>
+<span>                password = "".join(temp)</span>
+<span>            elif instruction.startswith("swap letter"):</span>
+<span>                password = password.translate(str.maketrans(tokens[2] + tokens[-1], tokens[-1] + tokens[2]))</span>
+<span>            elif instruction.startswith("reverse"):</span>
+<span>                x, y = values</span>
+<span>                password = password[:x] + password[x:y+1][::-1] + password[y+1:]</span>
+<span>            elif instruction.startswith("move"):</span>
+<span>                temp = list(password)</span>
+<span>                temp.insert(values[-1], temp.pop(values[0]))</span>
+<span>                password = "".join(temp)</span>
+<span>            elif instruction.startswith("rotate based"):</span>
+<span>                pos = password.index(instruction[-1])</span>
+<span>                rot = (1 + pos + (pos >= 4)) % len(password)</span>
+<span>                password = password[-rot:] + password[:-rot]</span>
+<span>            else:</span>
+<span>                # left/right</span>
+<span>                x = values[0]</span>
+<span>                if tokens[1] != "left":</span>
+<span>                    x *= -1</span>
+<span>                password = password[x:] + password[:x]</span>
+<span></span>
+<span>        return password</span>
+<span></span>
+<span></span>
+<span>    def unscramble(self, instructions, secret):</span>
+<span>        for p in permutations(secret): #since we only scramble, the original string is a permutation</span>
+<span>            guess = "".join(p)</span>
+<span>            if self.scramble(instructions, guess) == secret:</span>
+<span>                return guess</span>
+<span>        </span>
+<span>    def part_1(self):</span>
+<span>        res = self.scramble(self.input, "abcdefgh")</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.unscramble(self.input, "fbgdceah")</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

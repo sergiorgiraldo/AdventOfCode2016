@@ -33,3 +33,50 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 16</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/16</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 16</span>
+<span></span>
+<span></span>
+<span>    def checksum(self, initial_state, length):</span>
+<span>        table = str.maketrans("01", "10")</span>
+<span>        </span>
+<span>        state = initial_state</span>
+<span></span>
+<span>        while len(state) < length:</span>
+<span>            new = state[::-1].translate(table)</span>
+<span>            state = f"{state}0{new}"</span>
+<span></span>
+<span>        check = state[:length]</span>
+<span></span>
+<span>        while not len(check) % 2:</span>
+<span>            check = [int(x == y) for x, y in zip(*[iter(check)]*2)]</span>
+<span></span>
+<span>        return "".join(map(str, check))</span>
+<span></span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.checksum(self.input, 272)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.checksum(self.input, 35_651_584)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

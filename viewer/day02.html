@@ -33,3 +33,94 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 02</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/2</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0, "..")</span>
+<span>from base.advent import *</span>
+<span></span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 2</span>
+<span></span>
+<span>    def get_bathroom_code(self, instructions):</span>
+<span>        keypad = [</span>
+<span>            [1, 2, 3],</span>
+<span>            [4, 5, 6],</span>
+<span>            [7, 8, 9]]</span>
+<span></span>
+<span>        keypad, code = [*zip(*keypad[::-1])], []</span>
+<span></span>
+<span>        for instruction in instructions:</span>
+<span>            x, y = code[-1] if code else (1, 1)</span>
+<span>            for step in instruction:</span>
+<span>                tx = x + (step in 'LR' and (-1) ** (step == 'L'))</span>
+<span>                ty = y + (step in 'UD' and (-1) ** (step == 'D'))</span>
+<span>                try:</span>
+<span>                    if tx < 0 or ty < 0:</span>
+<span>                        raise IndexError</span>
+<span>                    keypad[tx][ty]</span>
+<span>                except IndexError:</span>
+<span>                    continue</span>
+<span>                else:</span>
+<span>                    x, y = tx, ty</span>
+<span></span>
+<span>            code.append((x, y))</span>
+<span></span>
+<span>        code_keys = [keypad[x][y] for x, y in code]</span>
+<span></span>
+<span>        code = "".join(str(key) for key in code_keys)</span>
+<span></span>
+<span>        return code</span>
+<span></span>
+<span>    def get_bathroom_code_cross(self, instructions):</span>
+<span>        keypad = [</span>
+<span>            [..., ..., 1, ..., ...],</span>
+<span>            [..., 2, 3, 4, ...],</span>
+<span>            [5, 6, 7, 8, 9],</span>
+<span>            [..., 'A', 'B', 'C', ...],</span>
+<span>            [..., ..., 'D', ..., ...]]</span>
+<span></span>
+<span>        keypad, code = [*zip(*keypad[::-1])], []</span>
+<span></span>
+<span>        for instruction in instructions:</span>
+<span>            x, y = code[-1] if code else (0, 2)</span>
+<span>            for step in instruction:</span>
+<span>                tx = x + (step in 'LR' and (-1) ** (step == 'L'))</span>
+<span>                ty = y + (step in 'UD' and (-1) ** (step == 'D'))</span>
+<span></span>
+<span>                try:</span>
+<span>                    if tx < 0 or ty < 0 or keypad[tx][ty] is ...:</span>
+<span>                        raise IndexError</span>
+<span>                except IndexError:</span>
+<span>                    continue</span>
+<span>                else:</span>
+<span>                    x, y = tx, ty</span>
+<span></span>
+<span>            code.append((x, y))</span>
+<span></span>
+<span>        code_keys = [keypad[x][y] for x, y in code]</span>
+<span></span>
+<span>        code = "".join(str(key) for key in code_keys)</span>
+<span></span>
+<span>        return code</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_bathroom_code(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_bathroom_code_cross(self.input)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span>    solution.part_1()</span>
+<span>    solution.part_2()</span>
+<span></span>
+</pre>

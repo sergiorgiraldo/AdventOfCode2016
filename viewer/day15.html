@@ -33,3 +33,58 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 15</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/15</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>import re</span>
+<span>from itertools import count</span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 15</span>
+<span></span>
+<span>    def get_discs(self, lines, extra_disc=False):</span>
+<span>        discs = []</span>
+<span></span>
+<span>        digits = re.compile(r"(\d+)") #Disc #2 has 2 positions; at time=0, it is at position 1.</span>
+<span>        </span>
+<span>        for line in lines:</span>
+<span>            _, num_positions, _, start_pos = map(int, digits.findall(line))</span>
+<span>            discs.append((num_positions, start_pos))</span>
+<span></span>
+<span>        if extra_disc:</span>
+<span>            discs.append((11, 0))</span>
+<span></span>
+<span>        return discs</span>
+<span></span>
+<span>    def get_capsule(self, lines, extra_disc=False):</span>
+<span>        discs = self.get_discs(lines, extra_disc)</span>
+<span></span>
+<span>        for i in count():</span>
+<span>            for t, (mod, start) in enumerate(discs, 1):</span>
+<span>                if (start + t + i) % mod != 0:</span>
+<span>                    break</span>
+<span>            else: #https://python-notes.curiousefficiency.org/en/latest/python_concepts/break_else.html</span>
+<span>                return i</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_capsule(self.input)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_capsule(self.input, True)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

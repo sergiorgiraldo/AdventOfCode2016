@@ -33,3 +33,41 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 18</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/18</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsStringSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 18</span>
+<span></span>
+<span>    def get_safe_tiles(self, initial_tiles, rows):</span>
+<span>        prev, safes = initial_tiles, initial_tiles.count(".")</span>
+<span>        for _ in range(rows - 1):</span>
+<span>            padded = f".{prev}." # left from 0 and right from -1 are non-existent and always safe</span>
+<span>            prev = "".join(".^"[left != right] for left, _, right in zip(padded, padded[1:], padded[2:]))</span>
+<span>            safes += prev.count(".")</span>
+<span></span>
+<span>        return safes</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_safe_tiles(self.input, 40)</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_safe_tiles(self.input, 400_000)</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == "__main__":</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>

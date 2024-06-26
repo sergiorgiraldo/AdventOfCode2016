@@ -33,3 +33,57 @@ span{
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 20</h1>
+<pre>
+<span># puzzle prompt: https://adventofcode.com/2016/day/20</span>
+<span></span>
+<span>import sys</span>
+<span>sys.path.insert(0,"..")</span>
+<span></span>
+<span>from base.advent import *</span>
+<span></span>
+<span>class Solution(InputAsLinesSolution):</span>
+<span>    _year = 2016</span>
+<span>    _day = 20</span>
+<span></span>
+<span>    def allowed(self, ip_list, n):</span>
+<span>        blocked = [tuple(map(int, x.split('-'))) for x in ip_list]</span>
+<span></span>
+<span>        rng, *blocked = sorted([*r] for r in blocked)</span>
+<span></span>
+<span>        for cur in blocked:</span>
+<span>            if cur[0] > n:</span>
+<span>                break</span>
+<span>            elif cur[0] > rng[-1] + 1:</span>
+<span>                yield from range(rng[-1] + 1, cur[0])</span>
+<span>                rng = cur</span>
+<span>            else:</span>
+<span>                rng[-1] = max(rng[-1], cur[-1])</span>
+<span></span>
+<span>        yield from range(rng[-1] + 1, n + 1)</span>
+<span></span>
+<span>    def get_allowed(self, ip_list, max):</span>
+<span>        ips = list(self.allowed(ip_list, max))</span>
+<span>        total = len(ips)</span>
+<span>        for _, x in enumerate(ips, start=1):</span>
+<span>            lowest =  x</span>
+<span>            break</span>
+<span></span>
+<span>        return (lowest, total)</span>
+<span></span>
+<span>    def part_1(self):</span>
+<span>        res = self.get_allowed(self.input, 2**32 - 1)[0] # 2**32 - 1 is the biggest ip number</span>
+<span></span>
+<span>        self.solve("1", res)</span>
+<span></span>
+<span>    def part_2(self):</span>
+<span>        res = self.get_allowed(self.input, 2**32 - 1)[1]</span>
+<span></span>
+<span>        self.solve("2", res)</span>
+<span></span>
+<span>if __name__ == '__main__':</span>
+<span>    solution = Solution()</span>
+<span></span>
+<span>    solution.part_1()</span>
+<span>    </span>
+<span>    solution.part_2()</span>
+</pre>
