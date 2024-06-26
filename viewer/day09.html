@@ -1,74 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 09</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/9
-
-import sys
-sys.path.insert(0, "..")
-from base.advent import *
-import re
-
-
-class Solution(InputAsStringSolution):
-    _year = 2016
-    _day = 9
-
-    pattern = re.compile(r'\((\d+)x(\d+)\)')
-
-    def get_decompressed_string(self, input):
-        arg = input
-
-        pos = 0
-        while True:
-            match = self.pattern.search(arg, pos)
-            if match is None:
-                break
-            chars, num = map(int, match.groups())
-            start, end = match.start(), match.end()
-            arg = arg[:start] + arg[end:end+chars] * num + arg[end+chars:]
-            pos = start + chars * num
-
-        return arg
-
-    def get_decompressed_string_v2(self, arg):
-        while True:
-            match = self.pattern.search(arg)
-            if match is None:
-                yield len(arg)
-                return
-
-            chars, num = map(int, match.groups())
-            end = match.end()
-
-            yield match.start() + sum(self.get_decompressed_string_v2(arg[end:end+chars])) * num
-
-            arg = arg[end+chars:]
-
-    def part_1(self):
-        arg = self.get_decompressed_string(self.input)
-
-        res = len(arg)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        arg = self.input
-
-        res = sum(self.get_decompressed_string_v2(arg))
-
-        self.solve("2", res)
-
-
-if __name__ == '__main__':
-    solution = Solution()
-
-    solution.part_1()
-
-    solution.part_2()
-
-</pre>

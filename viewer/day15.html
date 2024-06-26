@@ -1,62 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 15</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/15
-
-import sys
-sys.path.insert(0,"..")
-
-import re
-from itertools import count
-from base.advent import *
-
-class Solution(InputAsLinesSolution):
-    _year = 2016
-    _day = 15
-
-    def get_discs(self, lines, extra_disc=False):
-        discs = []
-
-        digits = re.compile(r"(\d+)") #Disc #2 has 2 positions; at time=0, it is at position 1.
-        
-        for line in lines:
-            _, num_positions, _, start_pos = map(int, digits.findall(line))
-            discs.append((num_positions, start_pos))
-
-        if extra_disc:
-            discs.append((11, 0))
-
-        return discs
-
-    def get_capsule(self, lines, extra_disc=False):
-        discs = self.get_discs(lines, extra_disc)
-
-        for i in count():
-            for t, (mod, start) in enumerate(discs, 1):
-                if (start + t + i) % mod != 0:
-                    break
-            else: #https://python-notes.curiousefficiency.org/en/latest/python_concepts/break_else.html
-                return i
-
-    def part_1(self):
-        res = self.get_capsule(self.input)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        res = self.get_capsule(self.input, True)
-
-        self.solve("2", res)
-
-if __name__ == '__main__':
-    solution = Solution()
-
-    solution.part_1()
-    
-    solution.part_2()
-</pre>

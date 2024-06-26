@@ -1,110 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 19</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/19
-
-import sys
-sys.path.insert(0,"..")
-
-from base.advent import *
-import collections
-
-class Solution(InputAsStringSolution):
-    _year = 2016
-    _day = 19
-
-    # part 1 is a solution to the Josephus problem
-    # https://en.wikipedia.org/wiki/Josephus_problem
-    # https://www.youtube.com/watch?v=uCsD3ZGzMgE
-    def get_lucky_elf(self, group_size):
-        return int("0b" + bin(group_size)[3:] + "1", 2)
-
-#  Odd ########################
-#   1
-# 5   2
-#  4 3
- 
-#   1           1
-# 5   2  -->  5   2
-#  4 -          4
- 
-#   1         1 
-# -   2  -->     2
-#   4         4 
- 
-#  -          2  
-#     2  -->
-#  4          4
- 
-#  2
-#     -->  2  
-#  -          
-#  Even ########################
-#   1
-# 6   2
-# 5   3
-#   4 
-  
-#   1
-# 6   2 
-#  5 3
- 
-#   1           1
-# -   2  -->  5   2
-#  5 3          3
- 
-#   -           2 
-# 5   2  -->  5
-#   3           3 
-
-#    5          5  
-# 2      -->
-#    -          2
- 
-#  -
-#     -->  2  
-#  2
-
-
-    def get_lucky_elf_across_circle(self, group_size):
-        left = collections.deque()
-        right = collections.deque()
-        for i in range(1, group_size + 1):
-            if i < (group_size // 2) + 1:
-                left.append(i)
-            else:
-                right.appendleft(i)
-
-        while left and right:
-            if len(left) > len(right):
-                left.pop()
-            else:
-                right.pop()
-
-            # rotate
-            right.appendleft(left.popleft())
-            left.append(right.pop())
-        return left[0] or right[0]
-
-    def part_1(self):
-        res = self.get_lucky_elf(int(self.input))
-
-        self.solve("1", res)
-
-    def part_2(self):
-        res = self.get_lucky_elf_across_circle(int(self.input))
-
-        self.solve("2", res)
-
-if __name__ == '__main__':
-    solution = Solution()
-
-    solution.part_1()
-    
-    solution.part_2()
-</pre>

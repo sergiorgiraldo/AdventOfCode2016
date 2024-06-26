@@ -1,70 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 01</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/1
-
-import sys
-sys.path.insert(0, "..")
-from base.advent import *
-
-
-class Solution(InputAsStringSolution):
-    _year = 2016
-    _day = 1
-
-    def shortest_path(self, instructions):
-        faceX, faceY = 0, 1
-        x, y = 0, 0
-        for instruction in instructions:
-            direction, offset = instruction[0], int(instruction[1:])
-            faceX, faceY = (
-                faceY, -faceX) if direction == 'R' else (-faceY, faceX)
-            x += faceX * offset
-            y += faceY * offset
-
-        return abs(x) + abs(y)
-
-    def first_duplicate(self, instructions):
-        faceX, faceY = 0, 1
-        x, y = 0, 0
-        locations = {(x, y)}
-
-        for instruction in instructions:
-            direction, offset = instruction[0], int(instruction[1:])
-            faceX, faceY = (
-                faceY, -faceX) if direction == 'R' else (-faceY, faceX)
-
-            for _ in range(offset):
-                x += faceX
-                y += faceY
-                if (x, y) not in locations:
-                    locations.add((x, y))
-                else:
-                    return abs(x) + abs(y)
-
-        return abs(x) + abs(y)
-
-    def part_1(self):
-        arr = self.input.split(", ")
-        res = self.shortest_path(arr)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        arr = self.input.split(", ")
-        res = self.first_duplicate(arr)
-
-        self.solve("2", res)
-
-
-if __name__ == "__main__":
-    solution = Solution()
-    solution.part_1()
-    solution.part_2()
-
-</pre>

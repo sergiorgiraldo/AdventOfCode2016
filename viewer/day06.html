@@ -1,44 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 06</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/6
-
-import sys
-sys.path.insert(0, "..")
-from base.advent import *
-from collections import Counter
-
-class Solution(InputAsLinesSolution):
-    _year = 2016
-    _day = 6
-
-    def get_corrected_message_common(self, messages):
-        return "".join(Counter(c).most_common(1)[0][0] for c in zip(*messages))
-
-    def get_corrected_message_uncommon(self, messages):
-        return "".join(Counter(c).most_common()[-1][0] for c in zip(*messages))
-
-    def part_1(self):
-        res = self.get_corrected_message_common(self.input)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        res = self.get_corrected_message_uncommon(self.input)
-
-        self.solve("2", res)
-
-
-if __name__ == '__main__':
-    solution = Solution()
-
-    solution.part_1()
-
-    solution.part_2()
-
-</pre>

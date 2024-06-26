@@ -1,65 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 03</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/3
-
-import sys
-sys.path.insert(0, "..")
-import re
-from base.advent import *
-
-
-class Solution(InputAsLinesSolution):
-    _year = 2016
-    _day = 3
-
-    def get_valid_triangles_By_rows(self, triangles):
-        return sum(
-            (a + b > c and b + c > a and a + c > b)
-            for a, b, c in triangles
-        )
-
-    def get_valid_triangles_By_columns(self, triangles):
-        return sum(
-            (a + b > c and b + c > a and a + c > b)
-            for col in zip(*triangles)
-            for a, b, c in zip(*[iter(col)]*3)
-        )
-
-    def get_triangles(self, arr):
-        triangles = []
-        for i in range(len(arr)):
-            pattern = r'\d+'
-            numbers = tuple(map(int, re.findall(pattern, arr[i])))
-            triangles.append(numbers)
-
-        return triangles
-
-    def part_1(self):
-        triangles = self.get_triangles(self.input)
-
-        res = self.get_valid_triangles_By_rows(triangles)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        triangles = self.get_triangles(self.input)
-
-        res = self.get_valid_triangles_By_columns(triangles)
-
-        self.solve("2", res)
-
-
-if __name__ == '__main__':
-    solution = Solution()
-
-    solution.part_1()
-
-    solution.part_2()
-
-</pre>

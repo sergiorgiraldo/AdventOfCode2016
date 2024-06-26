@@ -1,65 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 04</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/4
-
-import sys
-sys.path.insert(0, "..")
-from base.advent import *
-import string
-
-
-class Solution(InputAsLinesSolution):
-    _year = 2016
-    _day = 4
-
-    def get_sector_real_rooms(self, rooms):
-        sum = 0
-        # e.g udglrdfwlyh-gbh-ilqdqflqj-439[otyms]
-        for room in rooms:
-            # udglrdfwlyh-gbh-ilqdqflqj / 439[otyms]
-            *name, last = room.split("-")
-            id, check = last.split("[")     # 439 / otyms]
-            sector = "".join(name)          # udglrdfwlyhgbhilqdqflqj
-            checksum = sorted({*sector}, key=lambda x: (-sector.count(x), x))
-            if checksum[:5] == [*check.strip("]")]:
-                sum += int(id)
-
-        return sum
-
-    def get_sector_north_pole(self, rooms):
-        for room in rooms:
-            *name, last = room.split("-")
-            id = int(last.split("[")[0])
-            for word in name:
-                decrypted = self.decrypt(word, id)
-                if "north" in decrypted:
-                    return id
-
-    def decrypt(self, cypher, id):
-        return "".join(string.ascii_lowercase[(ord(c) - ord("a") + id) % 26] for c in cypher)
-
-    def part_1(self):
-        res = self.get_sector_real_rooms(self.input)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        res = self.get_sector_north_pole(self.input)
-
-        self.solve("2", res)
-
-
-if __name__ == "__main__":
-    solution = Solution()
-
-    solution.part_1()
-
-    solution.part_2()
-
-</pre>

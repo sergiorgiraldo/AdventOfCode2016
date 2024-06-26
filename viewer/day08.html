@@ -1,71 +1,35 @@
-<style>pre{font-size: large;}</style>
+<style>
+    pre {
+  background: #303030;
+  color: #f1f1f1;
+  padding: 10px 16px;
+  border-radius: 2px;
+  border-top: 4px solid #00aeef;
+  -moz-box-shadow: inset 0 0 10px #000;
+  box-shadow: inset 0 0 10px #000;
+  counter-reset: line;
+}
+pre span {
+  display: block;
+  line-height: 1.5rem;
+}
+pre span:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid #ddd;
+  padding: 0 .5em;
+  margin-right: .5em;
+  color: #888
+}
+span{
+    font-family: monospace;
+    font-size: 16px;
+}
+</style>
 <script src="script.js"></script>
 <div id="navigation">
 <button onclick="navigateTo('prev')">Previous Day</button>
 <button onclick="navigateTo('next')">Next Day</button>
 </div>
 <h1>Day 08</h1>
-<pre>
-# puzzle prompt: https://adventofcode.com/2016/day/8
-
-import sys
-sys.path.insert(0, "..")
-from base.advent import *
-import re
-
-
-class Solution(InputAsLinesSolution):
-    _year = 2016
-    _day = 8
-
-    def display(self, instructions):
-        screen = [[0] * 6 for _ in range(50)]
-
-        for instruction in instructions:
-            if instruction.startswith("rect"):
-                x, y = map(int, re.split("[ x]", instruction)[1:])
-                for j in range(x):
-                    for k in range(y):
-                        screen[j][k] = 1
-            else:
-                c, v = map(int, re.split("(?: by |=)", instruction)[-2:])
-                if "x=" in instruction:
-                    screen[c] = screen[c][-v:] + screen[c][:-v]
-                else:
-                    t = [list(x) for x in zip(*screen)]
-                    t[c] = t[c][-v:] + t[c][:-v]
-                    screen = [list(x) for x in zip(*t)]
-
-        return screen
-
-    def part_1(self):
-        screen = self.display(self.input)
-        res = sum(sum(x) for x in screen)
-
-        self.solve("1", res)
-
-    def part_2(self):
-        screen = self.display(self.input)
-        for row in zip(*screen):
-            print("".join(" #"[i] for i in row))
-
-#  # ###   ##    ## #### #    ###   ##  #### ####
-#  # #  # #  #    # #    #    #  # #  # #       #
-#  # #  # #  #    # ###  #    ###  #    ###    #
-#  # ###  #  #    # #    #    #  # #    #     #
-#  # #    #  # #  # #    #    #  # #  # #    #
- ##  #     ##   ##  #    #### ###   ##  #### ####
-
-        res = "UPOJFLBCEZ"
-
-        self.solve("2", res)
-
-
-if __name__ == "__main__":
-    solution = Solution()
-
-    solution.part_1()
-
-    solution.part_2()
-
-</pre>
