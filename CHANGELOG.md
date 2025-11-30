@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [14.1.0](https://github.com/sergiorgiraldo/AdventOfCode2016/compare/v14.0.0...v14.1.0) (2025-11-30)
+
+
+### Features
+
+* navigation in the viewer ([be93875](https://github.com/sergiorgiraldo/AdventOfCode2016/commit/be938756e9e6959d18f3152a88665c4d68e20909))
+* retrieve easter-eggs ([faf5ac2](https://github.com/sergiorgiraldo/AdventOfCode2016/commit/faf5ac222ee925dfddeec55bbe83b592fd9b1a86))
+
 ## [14.0.0](https://github.com/sergiorgiraldo/AdventOfCode2016/compare/v13.0.0...v14.0.0) (2024-02-09)
 
 
